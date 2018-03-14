@@ -1,1 +1,135 @@
-hello world
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Text Upload</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" />
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
+		<style type="text/css">
+			body{
+				font-family: verdana;
+			}
+			textarea{
+				width: 350px;
+				border: 1px solid #ccc;
+				padding: 20px;
+				box-shadow: 0 0 10px 0 #bbb;
+				font-size: 14px;
+				line-height: 25px;
+				float: left;
+			}
+			button{
+				font-size: 20px;
+				float: left;
+				margin: 50px 50px;
+			}
+			#float {
+				display: inline;
+			}
+			.container{
+				margin: 80px;
+			}
+		</style>
+</head>
+<body>
+	<h4 align="center">Text upload for <a href="https://www.ayurtimes.com/ayurvedic-measurements/">AYURVEDA</a></h4>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-md-12 col-sm-12" >
+				<textarea rows="15" id="result"></textarea>
+			</div> 
+			<div class="col-lg-4 col-md-12 col-sm-12">
+				<button type="button" onclick="run();">Convert</button>
+			</div>
+			<div class="col-lg-4 col-md-12 col-sm-12">
+				<textarea rows="15" id="float"></textarea>
+			</div> 
+		</div>
+	</div>
+		<script type="text/javascript">
+			var wta = ["PARAMANU","DHAVANSHI","MARICHI","LAL SARSHAP","TUNDAL","DHANYAMASH","YAVA","RATTI","ANDIKA","MASHAK","SHAAN","KOL","TOLA","KARSHA","SHUKTI","PAL","CHHATANK","PRASRTIS","CHHATAAK","KUDAV","MANIKA","PRASTHA","SER","ADHAKA","TULA","DRONA","SURPA","DRONI","BHARA","KHARI"];
+			var wtm = [0.0016,0.05,0.32,1.95,15.62,31.25,62.5,125,250,1,3,6,12,12,24,48,60,96,186,192,384,768,960,3073,4800,12228,24576,49152,96000,196608];
+			var wtu = ["mg","mg","mg","mg","mg","mg","mg","mg","mg","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm","gm"];
+			var timea=["KSANA","LAVA","NIMESHA","KASTHA","KALA","GHATI","MUHURTA","AHORATRA","PAKSA","MASA","RITU","AYANA","SAMVATSARA","YUGA"];
+			var timem=[0.38,0.77,1.55,4.66,140,24,48,24,15,30,60,6,12,5];
+			var timeu=["seconds","seconds","seconds","seconds","seconds","minutes","minutes","hours","days","days","days","months","months","years"];
+			var lena=["YAVODARA","ANGULA","BITAHASTI","ARATNI","HASTA","RAJAHASTA","VYAMA"];
+			var lenm=[2.4,1.95,22.86,41.91,45.72,55.88,182.88];
+			var lenu=["mm","cm","cm","cm","cm","cm","cm"];
+			var gnmbr,gunit="",s="";
+			function change(nmbr,unit) {
+				var f=0,i;
+				//alert(unit);
+				for(i=0;i<wtm.length;i++) {
+					if(unit==wta[i]) {
+						f=1;
+						gnmbr=parseInt(nmbr)*wtm[i];
+						gunit=wtu[i];
+						//alert("found weight "+f);
+						break;
+					}
+				}
+				if(f==1)
+					return;
+				else {
+					for(i=0;i<timea.length;i++) {
+						if(unit==timea[i]) {
+							f=1;
+							//alert("found time "+f);
+							gnmbr=parseInt(nmbr)*timem[i];
+							gunit=timeu[i];
+							break;
+						}
+					}
+					if(f==1)
+						return;
+					else {
+						for(i=0;i<lena.length;i++) {
+							if(unit==lena[i]) {
+								f=1;
+								//alert("found length "+f);
+								gnmbr=parseInt(nmbr)*lenm[i];
+								gunit=lenu[i];
+								break;
+							}
+						}
+						if(f==1)
+							return;
+
+						gnmbr=nmbr;
+						gunit=unit.toLowerCase();
+					}
+				}
+			}
+			function run () {
+				    var tex = $('#result').val();
+				    var nmbr="";
+				    var unit="";
+				    var i,j;
+					tex=tex.split("\n");
+					for(j=0;j<tex.length;j++){
+						var text=tex[j].split(" ");
+						for(i=0;i<text.length;i++) {
+							if(parseInt(text[i]) && i!=text.length-1) {
+								nmbr=text[i];
+								unit=text[i+1];
+								unit=unit.toUpperCase();
+								gunit="";
+								change(nmbr,unit);
+								s+=" "+gnmbr+" "+gunit;
+								i+=1;
+								continue;
+							}
+							s+=" "+text[i];
+						}
+						s+="\n";
+					}
+					//alert(s+"hiiiiii");
+					$("#float").val(s);
+					s="";
+					
+				}
+
+		</script>
+</body>
+</html>
